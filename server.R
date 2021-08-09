@@ -13,8 +13,25 @@ server <- function(input, output) {
         return(dt)
     })
 
+    dt_info <- eventReactive(input$dt_select, {
+        dt <- dt_data()
+
+        info <- data.frame(
+            Nome    = input$game_select,
+            Media   = dt$peak %>% mean(),
+            Mediana = dt$peak %>% median()
+        )
+
+        return(info)
+    })
+
     output$charts <- renderDataTable(
         dt_data() %>% as.data.frame(),
+        options = dt_options
+    )
+
+    output$info <- renderDataTable(
+        dt_info() %>% as.data.frame(),
         options = dt_options
     )
 }

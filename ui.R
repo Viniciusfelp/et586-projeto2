@@ -17,6 +17,11 @@ data_config <- box(
     actionButton("dt_select", "Submeter")
 )
 
+data_info <- box(
+    width = 12,
+    dataTableOutput("info")
+)
+
 data_table <- box(
     width = 12,
     dataTableOutput("charts")
@@ -29,6 +34,7 @@ sidebar <- dashboardSidebar()
 
 body <- dashboardBody(
     data_config %>% fluidRow(),
+    data_info %>% fluidRow(),
     data_table  %>% fluidRow()
 )
 
