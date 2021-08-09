@@ -13,8 +13,8 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
    - [x] mediana
    - [x] moda
    - [ ] desvio padrão
-   - [ ] valor máximo na série
-   - [ ] valor mínimo na série
+   - [x] valor máximo na série
+   - [x] valor mínimo na série
 - [ ] Adicionar histograma da série
 - [ ] Adicionar boxplot da série
 - [ ] Adicionar segunda aba com:
