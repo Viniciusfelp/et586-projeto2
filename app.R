@@ -1,11 +1,7 @@
 library(shiny)
 library(shinydashboard)
 
-ui <- dashboardPage(
-    dashboardHeader(),
-    dashboardSidebar(),
-    dashboardBody()
-)
+source("ui.R")
 
 server <- function(input, output) {
 }
