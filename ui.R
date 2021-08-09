@@ -6,13 +6,7 @@ data_config <- box(
     selectInput(
         "game_select",
         "Selecione o Jogo",
-        c(
-            "Counter-Strike: Global Offensive",
-            "Dota 2",
-            "PLAYERUNKNOWN'S BATTLEGROUNDS",
-            "Apex Legends",
-            "Rust"
-        )
+        game_names
     ),
     selectInput(
         "col_select",

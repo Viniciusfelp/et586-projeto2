@@ -7,10 +7,7 @@ server <- function(input, output) {
     )
 
     dt_data <- eventReactive(input$dt_select, {
-        dt_data <- read.csv("SteamCharts.csv")
-        dt <- subset(dt_data, dt_data$gamename == input$game_select)
-
-        return(dt)
+        subset(master_df, master_df$gamename == input$game_select) %>% return()
     })
 
     dt_column <- eventReactive(input$dt_select, {
@@ -27,7 +24,7 @@ server <- function(input, output) {
 
     dt_info <- eventReactive(input$dt_select, {
         data <- dt_column()
-  
+
         info <- data.frame(
             Nome         = input$game_select,
             Media        = data %>% mean(),
