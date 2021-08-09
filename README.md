@@ -12,7 +12,7 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
    - [x] média 
    - [x] mediana
    - [x] moda
-   - [ ] desvio padrão
+   - [x] desvio padrão
    - [x] valor máximo na série
    - [x] valor mínimo na série
 - [ ] Adicionar histograma da série
