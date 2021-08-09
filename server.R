@@ -19,7 +19,8 @@ server <- function(input, output) {
         info <- data.frame(
             Nome    = input$game_select,
             Media   = dt$peak %>% mean(),
-            Mediana = dt$peak %>% median()
+            Mediana = dt$peak %>% median(),
+            Moda    = (-table(dt$peak) %>% sort() %>% names())[1]
         )
 
         return(info)
