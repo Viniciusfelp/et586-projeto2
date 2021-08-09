@@ -2,8 +2,6 @@ library(shiny)
 library(shinydashboard)
 
 source("ui.R")
-
-server <- function(input, output) {
-}
+source("server.R")
 
 shinyApp(ui, server)
