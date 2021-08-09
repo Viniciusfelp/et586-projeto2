@@ -13,14 +13,26 @@ server <- function(input, output) {
         return(dt)
     })
 
-    dt_info <- eventReactive(input$dt_select, {
+    dt_column <- eventReactive(input$dt_select, {
         dt <- dt_data()
+
+        if (input$col_select == "Número médio de jogadores simultâneos")
+            return(dt$avg)
+
+        if (input$col_select == "Maior número de jogadores simultâneos")
+            return(dt$peak)
+
+        return(dt$gain)
+    })
+
+    dt_info <- eventReactive(input$dt_select, {
+        data <- dt_column()
 
         info <- data.frame(
             Nome    = input$game_select,
-            Media   = dt$peak %>% mean(),
-            Mediana = dt$peak %>% median(),
-            Moda    = (-table(dt$peak) %>% sort() %>% names())[1]
+            Media   = data %>% mean(),
+            Mediana = data %>% median(),
+            Moda    = (-table(data) %>% sort() %>% names())[1]
         )
 
         return(info)

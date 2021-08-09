@@ -14,6 +14,15 @@ data_config <- box(
             "Rust"
         )
     ),
+    selectInput(
+        "col_select",
+        "Selecione o que analisar",
+        c(
+            "Número médio de jogadores simultâneos",
+            "Maior número de jogadores simultâneos",
+            "Número de novos jogadores no último mês"
+        )
+    ),
     actionButton("dt_select", "Submeter")
 )
 
