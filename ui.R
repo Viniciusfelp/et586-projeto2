@@ -39,12 +39,23 @@ data_table <- box(
 
 header <- dashboardHeader()
 
-sidebar <- dashboardSidebar()
+sidebar <- dashboardSidebar(
+    sidebarMenu(
+        menuItem("Métricas", tabName = "metricas", icon = icon("dice-one")),
+        menuItem("Comparações", tabName = "comp", icon = icon("dice"))
+    )
+)
 
 body <- dashboardBody(
-    data_config %>% fluidRow(),
-    data_info %>% fluidRow(),
-    data_table  %>% fluidRow()
+    tabItems(
+        tabItem(tabName = "metricas",
+            data_config %>% fluidRow(),
+            data_info %>% fluidRow(),
+            data_table  %>% fluidRow()
+        ),
+        tabItem(tabName = "comp",
+        )
+    )
 )
 
 ui <- dashboardPage(header, sidebar, body)
