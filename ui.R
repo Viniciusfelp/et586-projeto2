@@ -9,7 +9,7 @@ data_config <- box(
         c(
             "Counter-Strike: Global Offensive",
             "Dota 2",
-            "PLAYERUNKOWN'S BATTLEGROUNDS",
+            "PLAYERUNKNOWN'S BATTLEGROUNDS",
             "Apex Legends",
             "Rust"
         )
