@@ -29,10 +29,12 @@ server <- function(input, output) {
         data <- dt_column()
 
         info <- data.frame(
-            Nome    = input$game_select,
-            Media   = data %>% mean(),
-            Mediana = data %>% median(),
-            Moda    = (-table(data) %>% sort() %>% names())[1]
+            Nome       = input$game_select,
+            Media      = data %>% mean(),
+            Mediana    = data %>% median(),
+            Moda       = (-table(data) %>% sort() %>% names())[1],
+            MaiorValor = data %>% max(),
+            MenorValor = data %>% min()
         )
 
         return(info)
