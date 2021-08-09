@@ -17,7 +17,7 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
    - [x] valor mínimo na série
 - [ ] Adicionar histograma da série
 - [ ] Adicionar boxplot da série
-- [ ] Adicionar segunda aba com:
+- [x] Adicionar segunda aba com:
    - [ ] duas classes a serem analisadas
    - [ ] intervalo de datas para a análise
    - [ ] uma tabela com o valor da correlação entre as classes
