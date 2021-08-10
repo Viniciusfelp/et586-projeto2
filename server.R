@@ -1,3 +1,7 @@
+get_date <- function(year, month) {
+    paste(month, "15th,", year) %>% mdy() %>% return()
+}
+
 server <- function(input, output) {
     dt_options <- list(
         pageLength = 10,
@@ -10,16 +14,10 @@ server <- function(input, output) {
         if (!input$true_date %>% is.null()) {
             interval <- input$true_date
 
-            year1  <- interval[1] %>% format(format = "%Y") %>% as.numeric()
-            year2  <- interval[2] %>% format(format = "%Y") %>% as.numeric()
-
-            month1 <- interval[1] %>% format(format = "%B")
-            month2 <- interval[2] %>% format(format = "%B")
-
             master_df %>%
             subset(gamename == input$game_select) %>%
-            subset(year >= year1) %>%
-            subset(year <= year2) %>%
+            subset(get_date(year, month) >= interval[1]) %>%
+            subset(get_date(year, month) <= interval[2]) %>%
             return()
 
         } else {
