@@ -7,7 +7,7 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
 
 ## TODO
 - [x] Adicionar input para classe a ser analisada
-- [ ] Adicionar intervalo de datas da análise
+- [x] Adicionar intervalo de datas da análise
 - [x] Adicionar uma tabela contendo:
    - [x] média 
    - [x] mediana
