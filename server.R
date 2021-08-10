@@ -11,24 +11,30 @@ server <- function(input, output) {
     )
 
     dt_data <- eventReactive(input$dt_select, {
-        if (!input$true_date %>% is.null()) {
-            interval <- input$true_date
+        master_df %>%
+        subset(gamename == input$game_select) %>%
+        return()
+    })
 
-            master_df %>%
-            subset(gamename == input$game_select) %>%
-            subset(get_date(year, month) >= interval[1]) %>%
-            subset(get_date(year, month) <= interval[2]) %>%
-            return()
+    dt_data_filtered <- eventReactive(input$dt_select, {
+        dt <- dt_data()
+
+        if (input$true_date %>% is.null()) {
+            return(dt)
 
         } else {
-            master_df %>%
-            subset(gamename == input$game_select) %>%
+
+            interval <- input$true_date
+
+            dt %>%
+            subset(get_date(year, month) >= interval[1]) %>%
+            subset(get_date(year, month) <= interval[2]) %>%
             return()
         }
     })
 
     dt_column <- eventReactive(input$dt_select, {
-        dt <- dt_data()
+        dt <- dt_data_filtered()
 
         if (input$col_select == "Número médio de jogadores simultâneos")
             return(dt$avg)
@@ -56,7 +62,7 @@ server <- function(input, output) {
     })
 
     output$charts <- renderDataTable(
-        dt_data() %>% as.data.frame(),
+        dt_data_filtered() %>% as.data.frame(),
         options = dt_options
     )
 
