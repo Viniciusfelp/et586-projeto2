@@ -52,7 +52,7 @@ server <- function(input, output) {
             DesvioPadrao = data %>% sd()
         )
 
-        return(info)
+        return(info %>% t() %>% as.data.frame())
     })
 
     output$charts <- renderDataTable(
