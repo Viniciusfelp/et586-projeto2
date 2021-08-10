@@ -84,8 +84,11 @@ server <- function(input, output) {
         startdate <- mindate
 
         if (!input$true_date %>% is.null()) {
-            startdate <- input$true_date[1] %>% format(format = "%Y-%m-%d")
-            enddate   <- input$true_date[2] %>% format(format = "%Y-%m-%d")
+            if (!input$true_date[1] %>% is.na())
+                startdate <- input$true_date[1]
+
+            if (!input$true_date[2] %>% is.na())
+                enddate   <- input$true_date[2]
         }
 
         dateRangeInput(
