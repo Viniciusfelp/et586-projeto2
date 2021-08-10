@@ -11,11 +11,12 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
 - shinydashboard
 - magrittr
 - lubridate
+- DT
 
 ## Como Instalar
 É preciso ter o interpretador da linguagem R instalado com todas as bibliotecas listadas acima. Elas podem ser instaladas rodando o comando a baixo no interpretador
 ```r
-   install.packages(<nome_da_biblioteca>)
+   install.packages("nome_da_biblioteca")
 ```
 
 Tendo o interpretador pronto e o repositório clonado, abra o diretório raiz no terminal e execute:
