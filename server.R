@@ -57,12 +57,20 @@ server <- function(input, output) {
         maxdate <- paste(maxyear, "12", "15", sep = "-")
         mindate <- paste(minyear, "01", "15", sep = "-")
 
+        enddate   <- maxdate
+        startdate <- mindate
+
+        if (!input$true_date %>% is.null()) {
+            startdate <- input$true_date[1] %>% format(format = "%Y-%m-%d")
+            enddate   <- input$true_date[2] %>% format(format = "%Y-%m-%d")
+        }
+
         dateRangeInput(
             "true_date",
             "Período de Análise",
-            end       = maxdate,
+            end       = enddate,
             max       = maxdate,
-            start     = mindate,
+            start     = startdate,
             min       = mindate,
             format    = "MM-yyyy",
             separator = " - ",
