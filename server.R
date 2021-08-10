@@ -7,7 +7,26 @@ server <- function(input, output) {
     )
 
     dt_data <- eventReactive(input$dt_select, {
-        subset(master_df, master_df$gamename == input$game_select) %>% return()
+        if (!input$true_date %>% is.null()) {
+            interval <- input$true_date
+
+            year1  <- interval[1] %>% format(format = "%Y") %>% as.numeric()
+            year2  <- interval[2] %>% format(format = "%Y") %>% as.numeric()
+
+            month1 <- interval[1] %>% format(format = "%B")
+            month2 <- interval[2] %>% format(format = "%B")
+
+            master_df %>%
+            subset(gamename == input$game_select) %>%
+            subset(year >= year1) %>%
+            subset(year <= year2) %>%
+            return()
+
+        } else {
+            master_df %>%
+            subset(gamename == input$game_select) %>%
+            return()
+        }
     })
 
     dt_column <- eventReactive(input$dt_select, {
