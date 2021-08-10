@@ -47,4 +47,26 @@ server <- function(input, output) {
         dt_info() %>% as.data.frame(),
         options = dt_options
     )
+
+    output$timedate <- renderUI({
+        dt <- dt_data()
+
+        minyear <- min(dt$year)
+        maxyear <- max(dt$year)
+
+        maxdate <- paste(maxyear, "12", "15", sep = "-")
+        mindate <- paste(minyear, "01", "15", sep = "-")
+
+        dateRangeInput(
+            "true_date",
+            "Período de Análise",
+            end       = maxdate,
+            max       = maxdate,
+            start     = mindate,
+            min       = mindate,
+            format    = "MM-yyyy",
+            separator = " - ",
+            language  = "pt-BR"
+        )
+    })
 }
