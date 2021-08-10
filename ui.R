@@ -17,6 +17,7 @@ data_config <- box(
             "Número de novos jogadores no último mês"
         )
     ),
+    uiOutput("timedate"),
     actionButton("dt_select", "Submeter")
 )
 
