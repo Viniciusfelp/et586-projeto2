@@ -1,3 +1,7 @@
+get_date <- function(year, month) {
+    paste(month, "15th,", year) %>% mdy() %>% return()
+}
+
 server <- function(input, output) {
     dt_options <- list(
         pageLength = 10,
@@ -7,7 +11,20 @@ server <- function(input, output) {
     )
 
     dt_data <- eventReactive(input$dt_select, {
-        subset(master_df, master_df$gamename == input$game_select) %>% return()
+        dt <- master_df %>% subset(gamename == input$game_select)
+
+        if (input$true_date %>% is.null()) {
+            return(dt)
+
+        } else {
+
+            interval <- input$true_date
+
+            dt %>%
+            subset(get_date(year, month) >= interval[1]) %>%
+            subset(get_date(year, month) <= interval[2]) %>%
+            return()
+        }
     })
 
     dt_column <- eventReactive(input$dt_select, {
@@ -47,4 +64,37 @@ server <- function(input, output) {
         dt_info() %>% as.data.frame(),
         options = dt_options
     )
+
+    output$timedate <- renderUI({
+        dt <- master_df %>% subset(gamename == input$game_select)
+
+        minyear <- min(dt$year)
+        maxyear <- max(dt$year)
+
+        maxdate <- paste(maxyear, "12", "15", sep = "-")
+        mindate <- paste(minyear, "01", "15", sep = "-")
+
+        enddate   <- maxdate
+        startdate <- mindate
+
+        if (!input$true_date %>% is.null()) {
+            if (!input$true_date[1] %>% is.na())
+                startdate <- input$true_date[1]
+
+            if (!input$true_date[2] %>% is.na())
+                enddate   <- input$true_date[2]
+        }
+
+        dateRangeInput(
+            "true_date",
+            "Período de Análise",
+            end       = enddate,
+            max       = maxdate,
+            start     = startdate,
+            min       = mindate,
+            format    = "MM-yyyy",
+            separator = " - ",
+            language  = "pt-BR"
+        )
+    })
 }
