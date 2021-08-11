@@ -1,7 +1,3 @@
-get_date <- function(year, month) {
-    paste(month, "15th,", year) %>% mdy() %>% return()
-}
-
 server <- function(input, output) {
     dt_options <- list(
         pageLength = 10,
@@ -12,19 +8,12 @@ server <- function(input, output) {
 
     dt_data <- eventReactive(input$dt_select, {
         dt <- master_df %>% filter_name(input$game_select)
+        interval <- input$true_date
 
-        if (input$true_date %>% is.null()) {
-            return(dt)
+        if (!is.null(interval))
+            dt <- dt %>% filter_date(interval)
 
-        } else {
-
-            interval <- input$true_date
-
-            dt %>%
-            subset(get_date(year, month) >= interval[1]) %>%
-            subset(get_date(year, month) <= interval[2]) %>%
-            return()
-        }
+        return(dt)
     })
 
     dt_column <- eventReactive(input$dt_select, {
