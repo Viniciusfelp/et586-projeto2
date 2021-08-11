@@ -29,19 +29,20 @@ server <- function(input, output) {
     })
 
     dt_info <- eventReactive(input$dt_select, {
-        data <- dt_column()
+        column <- dt_column()
 
-        info <- data.frame(
+        data.frame(
             Nome         = input$game_select,
-            Media        = data %>% mean(),
-            Mediana      = data %>% median(),
-            Moda         = (-table(data) %>% sort() %>% names())[1],
-            MaiorValor   = data %>% max(),
-            MenorValor   = data %>% min(),
-            DesvioPadrao = data %>% sd()
-        )
-
-        return(info %>% t() %>% as.data.frame())
+            Media        = column %>% mean(),
+            Mediana      = column %>% median(),
+            Moda         = (-table(column) %>% sort() %>% names())[1],
+            MaiorValor   = column %>% max(),
+            MenorValor   = column %>% min(),
+            DesvioPadrao = column %>% sd()
+        ) %>%
+        t() %>%
+        as.data.frame() %>%
+        return()
     })
 
     output$charts <- renderDataTable(
