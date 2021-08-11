@@ -11,7 +11,7 @@ server <- function(input, output) {
     )
 
     dt_data <- eventReactive(input$dt_select, {
-        dt <- master_df %>% subset(gamename == input$game_select)
+        dt <- master_df %>% filter_name(input$game_select)
 
         if (input$true_date %>% is.null()) {
             return(dt)
