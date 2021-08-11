@@ -45,6 +45,22 @@ server <- function(input, output) {
         return()
     })
 
+    get_interval <- function(mindate, maxdate) {
+        if (is.null(input$true_date))
+            return(c(mindate, maxdate))
+
+        interval <- input$true_date
+
+        if (input$true_date[1] %>% is.na())
+            interval[1] <- mindate
+
+        if (input$true_date[2] %>% is.na())
+            interval[2] <- maxdate
+
+        return(interval)
+    }
+
+
     output$charts <- renderDataTable(
         dt_data() %>% as.data.frame(),
         options = dt_options
@@ -56,35 +72,25 @@ server <- function(input, output) {
     )
 
     output$timedate <- renderUI({
-        dt <- master_df %>% subset(gamename == input$game_select)
+        dt <- master_df %>% filter_name(input$game_select)
 
-        minyear <- min(dt$year)
-        maxyear <- max(dt$year)
+        maxdate <- dt$year %>% max() %>% paste("12", "31", sep = "-")
+        mindate <- dt$year %>% min() %>% paste("01", "01", sep = "-")
 
-        maxdate <- paste(maxyear, "12", "15", sep = "-")
-        mindate <- paste(minyear, "01", "15", sep = "-")
-
-        enddate   <- maxdate
-        startdate <- mindate
-
-        if (!input$true_date %>% is.null()) {
-            if (!input$true_date[1] %>% is.na())
-                startdate <- input$true_date[1]
-
-            if (!input$true_date[2] %>% is.na())
-                enddate   <- input$true_date[2]
-        }
+        curr_interval <- get_interval(mindate, maxdate)
 
         dateRangeInput(
             "true_date",
             "Período de Análise",
-            end       = enddate,
+            end       = curr_interval[2],
+            start     = curr_interval[1],
             max       = maxdate,
-            start     = startdate,
             min       = mindate,
-            format    = "MM-yyyy",
-            separator = " - ",
-            language  = "pt-BR"
+            format    = "MM, yyyy",
+            separator = "até",
+            language  = "pt-BR",
+            startview = "decade",
+            weekstart = 0
         )
     })
 }
