@@ -17,3 +17,12 @@ filter_date <- function(df, interval) {
     subset(get_date(year, month) <= interval[2]) %>%
     return()
 }
+
+filter_data <- function(df, name = NULL, interval = NULL) {
+    filtered <- df %>% filter_name(name)
+
+    if (!is.null(interval))
+        filtered <- filtered %>% filter_date(interval)
+
+    return(filtered)
+}
