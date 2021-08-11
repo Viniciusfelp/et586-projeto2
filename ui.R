@@ -1,3 +1,5 @@
+################################### MÉTRICAS ###################################
+
 data_config <- box(
     width = 12,
     status = "warning",
@@ -32,6 +34,39 @@ data_table <- box(
 )
 
 
+################################# COMPARAÇÕES ##################################
+
+data_config_comp <- box(
+    width = 12,
+    status = "warning",
+    solidHeader = TRUE,
+    title = "Configure Dataset",
+    selectizeInput(
+        "game_select_comp",
+        "Selecione os Jogos",
+        game_names,
+        options = list(
+            maxItems = 2,
+            placeholder = "Selecione 2 jogos",
+            onInitialize = I("function() { this.setValue(''); }")
+        )
+    ),
+    selectInput(
+        "col_select_comp",
+        "Selecione o que analisar",
+        c(
+            "Número médio de jogadores simultâneos",
+            "Maior número de jogadores simultâneos",
+            "Número de novos jogadores no último mês"
+        )
+    ),
+    uiOutput("timedate_comp"),
+    actionButton("dt_select_comp", "Submeter")
+)
+
+
+################################# GERAL ########################################
+
 header <- dashboardHeader()
 
 sidebar <- dashboardSidebar(
@@ -49,6 +84,7 @@ body <- dashboardBody(
             data_table  %>% fluidRow()
         ),
         tabItem(tabName = "comp",
+            data_config_comp %>% fluidRow()
         )
     )
 )
