@@ -71,18 +71,23 @@ server <- function(input, output) {
     }
 
     comp_line_graph <- eventReactive(input$dt_select_comp, {
-        df1 <- master_df %>% filter_data(
-            name = input$game_select_comp[1],
-            interval = input$true_date_comp
-        )
+        name1 <- input$game_select_comp[1]
+        name2 <- input$game_select_comp[2]
 
-        aux <- df1$avg %>% na.omit() %>% as.numeric()
+        df <- master_df[
+            master_df$gamename == name1 |
+            master_df$gamename == name2,
+        ] %>%
+        filter_date(input$true_date_comp)
+
+        aux <- df$avg %>% na.omit() %>% as.numeric()
         aux1 <- min(aux)
         aux2 <- max(aux)
 
-        df1 %>%
+        df %>%
         ggplot(aes(date, avg, group = 1)) +
-        geom_path() +
+        geom_path(aes(colour = gamename), data = filter_name(df, name1)) +
+        geom_path(aes(colour = gamename), data = filter_name(df, name2)) +
         ylab("Número médio de jogadores") +
         coord_cartesian(ylim = c(aux1, aux2)) +
         theme_bw() +
