@@ -94,6 +94,34 @@ server <- function(input, output) {
         scale_x_date(date_labels = "%b, %Y")
     })
 
+    comp_bar_graph <- eventReactive(input$dt_select_comp, {
+        name1 <- input$game_select_comp[1]
+        name2 <- input$game_select_comp[2]
+
+        df <- master_df[
+            master_df$gamename == name1 |
+            master_df$gamename == name2,
+        ] %>%
+        filter_date(input$true_date_comp)
+
+        df %>%
+        ggplot(aes(x = date, y = avg, group = 1)) +
+        geom_bar(
+            aes(fill = gamename),
+            stat = "identity",
+            data = filter_name(df, name1)
+        ) +
+        geom_bar(
+            aes(fill = gamename),
+            stat = "identity",
+            data = filter_name(df, name2)
+        ) +
+        ylab("Número médio de jogadores") +
+        xlab("") +
+        theme_bw() +
+        scale_x_date(date_labels = "%b, %Y")
+    })
+
     output$charts <- renderDataTable(
         master_df %>%
         filter_data(name = input$game_select, interval = input$true_date) %>%
@@ -160,4 +188,6 @@ server <- function(input, output) {
     })
 
     output$line_graph <- renderPlot(comp_line_graph())
+
+    output$bar_graph <- renderPlot(comp_bar_graph())
 }
