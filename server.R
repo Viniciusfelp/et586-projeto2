@@ -106,20 +106,12 @@ server <- function(input, output) {
         filter_date(input$true_date_comp)
 
         df %>%
-        ggplot(aes(x = date, y = avg, group = 1)) +
-        geom_bar(
-            aes(fill = gamename),
-            stat = "identity",
-            data = filter_name(df, name1)
-        ) +
-        geom_bar(
-            aes(fill = gamename),
-            stat = "identity",
-            data = filter_name(df, name2)
-        ) +
+        ggplot(aes(x = date, y = avg, fill = gamename, group = gamename)) +
+        geom_bar(stat = "identity", position = "dodge") +
         ylab("Número médio de jogadores") +
         xlab("") +
         theme_bw() +
+        theme(legend.position = "bottom") +
         scale_x_date(date_labels = "%b, %Y")
     })
 
