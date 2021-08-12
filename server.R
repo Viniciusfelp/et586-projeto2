@@ -1,8 +1,20 @@
-get_date <- function(year, month) {
-    paste(month, "15th,", year) %>% mdy() %>% return()
-}
-
 server <- function(input, output) {
+    std_date_interval <- function() {
+        dateRangeInput(
+            "true_date_comp",
+            "Período de Análise",
+            end       = Sys.Date(),
+            start     = "2012-01-01",
+            max       = Sys.Date(),
+            min       =  "2012-01-01",
+            format    = "MM, yyyy",
+            separator = "até",
+            language  = "pt-BR",
+            startview = "decade",
+            weekstart = 0
+        )
+    }
+
     dt_options <- list(
         pageLength = 10,
         language = list(
@@ -10,25 +22,12 @@ server <- function(input, output) {
         )
     )
 
-    dt_data <- eventReactive(input$dt_select, {
-        dt <- master_df %>% subset(gamename == input$game_select)
-
-        if (input$true_date %>% is.null()) {
-            return(dt)
-
-        } else {
-
-            interval <- input$true_date
-
-            dt %>%
-            subset(get_date(year, month) >= interval[1]) %>%
-            subset(get_date(year, month) <= interval[2]) %>%
-            return()
-        }
-    })
-
     dt_column <- eventReactive(input$dt_select, {
-        dt <- dt_data()
+        dt <- filter_data(
+            master_df,
+            name     = input$game_select,
+            interval = input$true_date
+        )
 
         if (input$col_select == "Número médio de jogadores simultâneos")
             return(dt$avg)
@@ -40,23 +39,65 @@ server <- function(input, output) {
     })
 
     dt_info <- eventReactive(input$dt_select, {
-        data <- dt_column()
+        column <- dt_column()
 
-        info <- data.frame(
+        data.frame(
             Nome         = input$game_select,
-            Media        = data %>% mean(),
-            Mediana      = data %>% median(),
-            Moda         = (-table(data) %>% sort() %>% names())[1],
-            MaiorValor   = data %>% max(),
-            MenorValor   = data %>% min(),
-            DesvioPadrao = data %>% sd()
-        )
+            Media        = column %>% mean(),
+            Mediana      = column %>% median(),
+            Moda         = (-table(column) %>% sort() %>% names())[1],
+            MaiorValor   = column %>% max(),
+            MenorValor   = column %>% min(),
+            DesvioPadrao = column %>% sd()
+        ) %>%
+        t() %>%
+        as.data.frame() %>%
+        return()
+    })
 
-        return(info %>% t() %>% as.data.frame())
+    get_interval <- function(mindate, maxdate, interval_option) {
+        if (is.null(interval_option))
+            return(c(mindate, maxdate))
+
+        interval <- interval_option
+
+        if (interval_option[1] %>% is.na())
+            interval[1] <- mindate
+
+        if (interval_option[2] %>% is.na())
+            interval[2] <- maxdate
+
+        return(interval)
+    }
+
+    comp_line_graph <- eventReactive(input$dt_select_comp, {
+        name1 <- input$game_select_comp[1]
+        name2 <- input$game_select_comp[2]
+
+        df <- master_df[
+            master_df$gamename == name1 |
+            master_df$gamename == name2,
+        ] %>%
+        filter_date(input$true_date_comp)
+
+        aux <- df$avg %>% na.omit() %>% as.numeric()
+        aux1 <- min(aux)
+        aux2 <- max(aux)
+
+        df %>%
+        ggplot(aes(date, avg, group = 1)) +
+        geom_path(aes(colour = gamename), data = filter_name(df, name1)) +
+        geom_path(aes(colour = gamename), data = filter_name(df, name2)) +
+        ylab("Número médio de jogadores") +
+        coord_cartesian(ylim = c(aux1, aux2)) +
+        theme_bw() +
+        scale_x_date(date_labels = "%b, %Y")
     })
 
     output$charts <- renderDataTable(
-        dt_data() %>% as.data.frame(),
+        master_df %>%
+        filter_data(name = input$game_select, interval = input$true_date) %>%
+        as.data.frame(),
         options = dt_options
     )
 
@@ -66,35 +107,57 @@ server <- function(input, output) {
     )
 
     output$timedate <- renderUI({
-        dt <- master_df %>% subset(gamename == input$game_select)
+        dt <- master_df %>% filter_name(input$game_select)
 
-        minyear <- min(dt$year)
-        maxyear <- max(dt$year)
+        maxdate <- dt$year %>% max() %>% paste("12", "31", sep = "-")
+        mindate <- dt$year %>% min() %>% paste("01", "01", sep = "-")
 
-        maxdate <- paste(maxyear, "12", "15", sep = "-")
-        mindate <- paste(minyear, "01", "15", sep = "-")
-
-        enddate   <- maxdate
-        startdate <- mindate
-
-        if (!input$true_date %>% is.null()) {
-            if (!input$true_date[1] %>% is.na())
-                startdate <- input$true_date[1]
-
-            if (!input$true_date[2] %>% is.na())
-                enddate   <- input$true_date[2]
-        }
+        curr_interval <- get_interval(mindate, maxdate, input$true_date)
 
         dateRangeInput(
             "true_date",
             "Período de Análise",
-            end       = enddate,
+            end       = curr_interval[2],
+            start     = curr_interval[1],
             max       = maxdate,
-            start     = startdate,
             min       = mindate,
-            format    = "MM-yyyy",
-            separator = " - ",
-            language  = "pt-BR"
+            format    = "MM, yyyy",
+            separator = "até",
+            language  = "pt-BR",
+            startview = "decade",
+            weekstart = 0
         )
     })
+
+    output$timedate_comp <-  renderUI({
+        if (length(input$game_select_comp) < 2)
+            return(std_date_interval())
+
+        dt1 <- master_df %>% filter_name(input$game_select_comp[1])
+        dt2 <- master_df %>% filter_name(input$game_select_comp[2])
+
+        minyear <- c(dt1$year %>% max(), dt2$year %>% max()) %>% min()
+        maxyear <- c(dt1$year %>% min(), dt2$year %>% min()) %>% max()
+
+        maxdate <- minyear %>% paste("12", "31", sep = "-")
+        mindate <- maxyear %>% paste("01", "01", sep = "-")
+
+        curr_interval <- get_interval(mindate, maxdate, input$true_date_comp)
+
+        dateRangeInput(
+            "true_date_comp",
+            "Período de Análise",
+            end       = curr_interval[2],
+            start     = curr_interval[1],
+            max       = maxdate,
+            min       = mindate,
+            format    = "MM, yyyy",
+            separator = "até",
+            language  = "pt-BR",
+            startview = "decade",
+            weekstart = 0
+        )
+    })
+
+    output$line_graph <- renderPlot(comp_line_graph())
 }

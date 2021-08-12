@@ -12,6 +12,7 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
 - magrittr
 - lubridate
 - DT
+- ggplot2
 
 ## Como Instalar
 É preciso ter o interpretador da linguagem R instalado com todas as bibliotecas listadas acima. Elas podem ser instaladas rodando o comando a baixo no interpretador
@@ -25,6 +26,7 @@ Tendo o interpretador pronto e o repositório clonado, abra o diretório raiz no
 ```
 
 ## TODO
+### Aba 1
 - [x] Adicionar input para classe a ser analisada
 - [x] Adicionar intervalo de datas da análise
 - [x] Adicionar uma tabela contendo:
@@ -36,10 +38,10 @@ Tendo o interpretador pronto e o repositório clonado, abra o diretório raiz no
    - [x] valor mínimo na série
 - [ ] Adicionar histograma da série
 - [ ] Adicionar boxplot da série
-- [x] Adicionar segunda aba com:
-   - [ ] duas classes a serem analisadas
-   - [ ] intervalo de datas para a análise
-   - [ ] uma tabela com o valor da correlação entre as classes
-   - [ ] gráfico de linha das classes
-   - [ ] gráfico em barra das médias de cada classe
-   - [ ] scatterplot das classes 
+### Aba 2
+- [x] duas classes a serem analisadas
+- [x] intervalo de datas para a análise
+- [ ] uma tabela com o valor da correlação entre as classes
+- [x] gráfico de linha das classes
+- [ ] gráfico em barra das médias de cada classe
+- [ ] scatterplot das classes 
