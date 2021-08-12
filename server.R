@@ -85,13 +85,13 @@ server <- function(input, output) {
         aux2 <- max(aux)
 
         df %>%
-        ggplot(aes(date, avg, group = 1)) +
-        geom_path(aes(colour = gamename), data = filter_name(df, name1)) +
-        geom_path(aes(colour = gamename), data = filter_name(df, name2)) +
+        ggplot(aes(date, avg, group = gamename, colour = gamename)) +
+        geom_path() +
         ylab("Número médio de jogadores") +
         xlab("") +
         coord_cartesian(ylim = c(aux1, aux2)) +
         theme_bw() +
+        theme(legend.position = "bottom") +
         scale_x_date(date_labels = "%b, %Y")
     })
 
