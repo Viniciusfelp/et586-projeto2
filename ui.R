@@ -71,6 +71,13 @@ line_graph <- box(
     plotOutput("line_graph")
 )
 
+bar_graph <- box(
+    title = "Gráfico de Barras",
+    width = 12,
+    solidHeader = TRUE,
+    plotOutput("bar_graph")
+)
+
 
 ################################# GERAL ########################################
 
@@ -92,7 +99,8 @@ body <- dashboardBody(
         ),
         tabItem(tabName = "comp",
             data_config_comp %>% fluidRow(),
-            line_graph       %>% fluidRow()
+            line_graph       %>% fluidRow(),
+            bar_graph        %>% fluidRow()
         )
     )
 )
