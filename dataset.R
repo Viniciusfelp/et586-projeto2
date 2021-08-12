@@ -9,13 +9,13 @@ get_date <- function(year, month) {
 master_df$date <- get_date(year = master_df$year, month = master_df$month)
 
 filter_name <- function(df, name) {
-    master_df[master_df$gamename == name,] %>% return()
+    df[df$gamename == name,] %>% return()
 }
 
 filter_date <- function(df, interval) {
-    master_df[
-        interval[1] <= master_df$date &
-        interval[2] >= master_df$date,
+    df[
+        interval[1] <= df$date &
+        interval[2] >= df$date,
     ] %>%
     return()
 }
