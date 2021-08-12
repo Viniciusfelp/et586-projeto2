@@ -6,23 +6,28 @@ get_date <- function(year, month) {
     paste(month, "15th,", year) %>% mdy() %>% return()
 }
 
+master_df$date <- get_date(year = master_df$year, month = master_df$month)
 
 filter_name <- function(df, name) {
-    df %>% subset(gamename == name) %>% return()
+    master_df[master_df$gamename == name,] %>% return()
 }
 
 filter_date <- function(df, interval) {
-    df %>%
-    subset(get_date(year, month) >= interval[1]) %>%
-    subset(get_date(year, month) <= interval[2]) %>%
+    master_df[
+        interval[1] <= master_df$date &
+        interval[2] >= master_df$date,
+    ] %>%
     return()
 }
 
 filter_data <- function(df, name = NULL, interval = NULL) {
-    filtered <- df %>% filter_name(name)
+    dt <- master_df
+
+    if (!is.null(name))
+        dt <- dt[dt$gamename == name,]
 
     if (!is.null(interval))
-        filtered <- filtered %>% filter_date(interval)
+        dt <- dt[interval[1] <= dt$date & dt$date <= interval[2],]
 
-    return(filtered)
+    return(dt)
 }
