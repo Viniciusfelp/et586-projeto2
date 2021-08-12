@@ -89,6 +89,7 @@ server <- function(input, output) {
         geom_path(aes(colour = gamename), data = filter_name(df, name1)) +
         geom_path(aes(colour = gamename), data = filter_name(df, name2)) +
         ylab("Número médio de jogadores") +
+        xlab("") +
         coord_cartesian(ylim = c(aux1, aux2)) +
         theme_bw() +
         scale_x_date(date_labels = "%b, %Y")
