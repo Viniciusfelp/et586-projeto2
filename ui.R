@@ -64,6 +64,13 @@ data_config_comp <- box(
     actionButton("dt_select_comp", "Submeter")
 )
 
+line_graph <- box(
+    title = "Gráfico de Linha",
+    width = 12,
+    solidHeader = TRUE,
+    plotOutput("line_graph")
+)
+
 
 ################################# GERAL ########################################
 
@@ -80,11 +87,12 @@ body <- dashboardBody(
     tabItems(
         tabItem(tabName = "metricas",
             data_config %>% fluidRow(),
-            data_info %>% fluidRow(),
+            data_info   %>% fluidRow(),
             data_table  %>% fluidRow()
         ),
         tabItem(tabName = "comp",
-            data_config_comp %>% fluidRow()
+            data_config_comp %>% fluidRow(),
+            line_graph       %>% fluidRow()
         )
     )
 )
