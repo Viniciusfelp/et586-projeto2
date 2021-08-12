@@ -12,6 +12,7 @@ Projeto 2 da discipla de Estatística e Probabilidade para Computação (et586)
 - magrittr
 - lubridate
 - DT
+- ggplot2
 
 ## Como Instalar
 É preciso ter o interpretador da linguagem R instalado com todas as bibliotecas listadas acima. Elas podem ser instaladas rodando o comando a baixo no interpretador
