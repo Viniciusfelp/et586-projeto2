@@ -95,7 +95,7 @@ server <- function(input, output) {
         scale_x_date(date_labels = "%b, %Y")
     })
 
-    comp_bar_graph <- eventReactive(input$dt_select_comp, {
+    comp_bar_graph_1 <- eventReactive(input$dt_select_comp, {
         name1 <- input$game_select_comp[1]
         name2 <- input$game_select_comp[2]
 
@@ -107,13 +107,38 @@ server <- function(input, output) {
 
         df %>%
         ggplot(aes(x = date, y = avg, fill = gamename, group = gamename)) +
-        geom_bar(stat = "identity", position = "dodge") +
+        geom_bar(stat = "identity", position = "dodge", show.legend = FALSE) +
         ylab("Número médio de jogadores") +
         xlab("") +
         theme_bw() +
-        theme(legend.position = "bottom") +
         scale_x_date(date_labels = "%b, %Y")
     })
+
+    comp_bar_graph_2 <- eventReactive(input$dt_select_comp, {
+        name1 <- input$game_select_comp[1]
+        name2 <- input$game_select_comp[2]
+        interval <- input$true_date_comp
+
+        df1 <- master_df %>% filter_data(name = name1, interval = interval)
+        df2 <- master_df %>% filter_data(name = name2, interval = interval)
+
+        df <- data.frame(
+            nome = c(name1, name2),
+            media  = c(
+                df1$avg %>% na.omit() %>% as.numeric() %>% mean(),
+                df2$avg %>% na.omit() %>% as.numeric() %>% mean()
+            )
+        )
+
+        df %>%
+        ggplot(aes(x = nome, y = media, fill = nome, group = nome)) +
+        geom_bar(stat = "identity", position = "dodge") +
+        ylab("Número médio de jogadores em todo o intervalo") +
+        xlab("") +
+        theme_bw() +
+        theme(legend.position = "bottom")
+    })
+
 
     output$charts <- renderDataTable(
         master_df %>%
@@ -182,5 +207,6 @@ server <- function(input, output) {
 
     output$line_graph <- renderPlot(comp_line_graph())
 
-    output$bar_graph <- renderPlot(comp_bar_graph())
+    output$bar_graph_1 <- renderPlot(comp_bar_graph_1())
+    output$bar_graph_2 <- renderPlot(comp_bar_graph_2())
 }
