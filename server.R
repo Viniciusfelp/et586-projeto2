@@ -80,23 +80,19 @@ server <- function(input, output) {
         aux1 <- min(aux)
         aux2 <- max(aux)
 
-        df1$interval <- get_date(year = df1$year, month = df1$month)
-
         df1 %>%
-        ggplot(aes(interval, avg, group = 1)) +
+        ggplot(aes(date, avg, group = 1)) +
         geom_path() +
         ylab("Número médio de jogadores") +
         coord_cartesian(ylim = c(aux1, aux2)) +
         theme_bw() +
-        scale_x_date(date_labels = "%B, %Y")
+        scale_x_date(date_labels = "%b, %Y")
     })
 
     output$charts <- renderDataTable(
-        filter_data(
-            master_df,
-            name     = input$game_select,
-            interval = input$true_date
-        ) %>% as.data.frame(),
+        master_df %>%
+        filter_data(name = input$game_select, interval = input$true_date) %>%
+        as.data.frame(),
         options = dt_options
     )
 
