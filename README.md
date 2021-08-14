@@ -43,5 +43,5 @@ Tendo o interpretador pronto e o repositório clonado, abra o diretório raiz no
 - [x] intervalo de datas para a análise
 - [ ] uma tabela com o valor da correlação entre as classes
 - [x] gráfico de linha das classes
-- [ ] gráfico em barra das médias de cada classe
-- [ ] scatterplot das classes 
+- [x] gráfico em barra das médias de cada classe
+- [x] scatterplot das classes 
