@@ -139,6 +139,26 @@ server <- function(input, output) {
         theme(legend.position = "bottom")
     })
 
+    comp_scatterplot <- eventReactive(input$dt_select_comp, {
+        name1 <- input$game_select_comp[1]
+        name2 <- input$game_select_comp[2]
+        interval <- input$true_date_comp
+
+        df <- master_df[
+            master_df$gamename == name1 |
+            master_df$gamename == name2,
+        ] %>%
+        filter_date(input$true_date_comp)
+
+        df %>%
+        ggplot(aes(x = date, y = avg, color = gamename)) +
+        geom_point() +
+        ylab("Número médio de jogadores") +
+        xlab("") +
+        theme_bw() +
+        scale_x_date(date_labels = "%b, %Y")
+    })
+
 
     output$charts <- renderDataTable(
         master_df %>%
@@ -209,4 +229,6 @@ server <- function(input, output) {
 
     output$bar_graph_1 <- renderPlot(comp_bar_graph_1())
     output$bar_graph_2 <- renderPlot(comp_bar_graph_2())
+
+    output$scatterplot <- renderPlot(comp_scatterplot())
 }

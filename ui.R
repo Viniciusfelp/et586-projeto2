@@ -79,6 +79,13 @@ bar_graphs <- box(
     plotOutput("bar_graph_2")
 )
 
+scatter_plot <- box(
+    title = "Scatterplot",
+    width = 12,
+    solidHeader = TRUE,
+    plotOutput("scatterplot")
+)
+
 
 ################################# GERAL ########################################
 
@@ -101,7 +108,8 @@ body <- dashboardBody(
         tabItem(tabName = "comp",
             data_config_comp %>% fluidRow(),
             line_graph       %>% fluidRow(),
-            bar_graphs       %>% fluidRow()
+            bar_graphs       %>% fluidRow(),
+            scatter_plot     %>% fluidRow()
         )
     )
 )
